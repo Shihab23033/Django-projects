@@ -18,7 +18,7 @@
                         {% csrf_token %}
                         <div class="row g-3 align-items-end">
                             <div class="col-md-4">
-                                <label class="form-label fw-semibold">Task Name</label>
+                                <label class="form-label fw-semibold">Task Title</Title></label>
                                 {{ form.name }}
                             </div>
                             <div class="col-md-4">
@@ -43,9 +43,19 @@
                                 {% if todo.deadline %}<br><span class="badge bg-info text-dark">Deadline: {{ todo.deadline|date:'Y-m-d H:i' }}</span>{% endif %}
                             </div>
                             <div class="d-flex align-items-center gap-2">
-                                <input type="checkbox" class="form-check-input me-2" {% if todo.is_complete %}checked{% endif %} title="Mark complete" disabled>
+                                <form method="post" action="{% url 'update_todo' todo.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="name" value="{{ todo.name }}">
+                                    <input type="hidden" name="description" value="{{ todo.description }}">
+                                    <input type="hidden" name="deadline" value="{{ todo.deadline|date:'Y-m-d\TH:i' }}">
+                                    <input type="hidden" name="is_complete" value="{% if not todo.is_complete %}on{% endif %}">
+                                    <button type="submit" class="form-check-input me-2" style="width:1.2em;height:1.2em;vertical-align:middle;" title="Mark complete">{% if todo.is_complete %}✓{% endif %}</button>
+                                </form>
                                 <a class="btn btn-outline-secondary btn-sm" href="{% url 'edit_todo' todo.id %}" title="Edit"><i class="bi bi-pencil"></i> Edit</a>
-                                <button class="btn btn-outline-danger btn-sm" title="Delete" disabled><i class="bi bi-trash"></i> Delete</button>
+                                <form method="post" action="{% url 'delete_todo' todo.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete"><i class="bi bi-trash"></i> Delete</button>
+                                </form>
                             </div>
                         </li>
                         {% empty %}
