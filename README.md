@@ -68,7 +68,6 @@ pipenv run python manage.py runserver
 Visit http://127.0.0.1:8000/ in your browser.
 
 ## Other Notes
-- To install Node.js (optional, for advanced frontend tooling): https://nodejs.org/
 - All dependencies are listed in `Pipfile` and `Pipfile.lock`.
 - For any issues, check your MySQL server is running and credentials are correct.
 
