@@ -73,7 +73,6 @@ Visit http://127.0.0.1:8000/ in your browser.
 - For any issues, check your MySQL server is running and credentials are correct.
 
 ## Project Structure
-- `todo/` - Django app with models, views, templates
 - `todolist/` - Project settings and URLs
 - `manage.py` - Django management script
 
