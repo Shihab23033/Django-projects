@@ -31,6 +31,10 @@
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-success btn-sm">Restore</button>
                                     </form>
+                                    <form method="post" action="{% url 'permanent_delete_todo' todo.id %}" style="display:inline; margin-left: 4px;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to permanently delete this task?');">Delete Permanently</button>
+                                    </form>
                                 </td>
                             </tr>
                         {% empty %}

@@ -9,4 +9,5 @@ urlpatterns = [
     path('edit/<int:pk>/', views.edit_todo, name='edit_todo'),
     path('deleted/', views.deleted_todos, name='deleted_todos'),
     path('restore/<int:pk>/', views.restore_todo, name='restore_todo'),
+    path('permanent_delete/<int:pk>/', views.permanent_delete_todo, name='permanent_delete_todo'),
 ]

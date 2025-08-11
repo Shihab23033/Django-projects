@@ -2,7 +2,10 @@
 
 A web-based To-Do List app built with Django, MySQL, and Pipenv.
 
-## Features
+- Add, update, and soft delete tasks (deleted tasks can be restored)
+- View delete history (see all deleted tasks)
+- Restore deleted tasks from history
+- Permanently delete tasks from delete history
 - Add, update, and soft delete tasks (deleted tasks can be restored)
 - View delete history (see all deleted tasks)
 - Restore deleted tasks from history
@@ -84,13 +87,16 @@ Visit http://127.0.0.1:8000/ in your browser.
 ---
 
 
+
 ## Usage
 
 - The main page shows all active (not deleted) tasks.
 - Use the sort controls to order tasks by deadline, name, or created date.
 - Use the search box to filter tasks by name or description. Matching text will be highlighted.
 - Click "Show Delete History" to view deleted tasks.
-- On the delete history page, click "Restore" to bring a task back to the main list.
+- On the delete history page:
+	- Click "Restore" to bring a task back to the main list.
+	- Click "Delete Permanently" to remove a task forever from the database.
 
 ---
 

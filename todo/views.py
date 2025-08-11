@@ -1,3 +1,10 @@
+# Permanently delete a todo
+def permanent_delete_todo(request, pk):
+	todo = get_object_or_404(ToDo, pk=pk)
+	if request.method == 'POST':
+		todo.delete()
+		return redirect('deleted_todos')
+	return JsonResponse({'error': 'Invalid request'}, status=400)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from .models import ToDo
@@ -19,7 +26,11 @@ def todo_list(request):
 		from django.db.models import Q
 		todos_qs = todos_qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
 	todos = todos_qs.order_by(f'{order_prefix}{sort_field}')
-	form = ToDoForm()
+	# If redirected after POST, show empty form. If POST with errors, show form with errors.
+	if request.method == 'POST':
+		form = ToDoForm(request.POST)
+	else:
+		form = ToDoForm()
 	return render(request, 'todo/todo_list.html', {
 		'todos': todos,
 		'form': form,
@@ -35,6 +46,7 @@ def add_todo(request):
 			todo = form.save()
 			if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 				return JsonResponse({'id': todo.id, 'description': todo.description, 'is_complete': todo.is_complete, 'created_at': todo.created_at.strftime('%Y-%m-%d %H:%M')})
+			# Always redirect to the main list without filters so the new entry is visible
 			return redirect('todo_list')
 	return JsonResponse({'error': 'Invalid request'}, status=400)
 
