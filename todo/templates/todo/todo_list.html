@@ -1,4 +1,5 @@
 {% load static %}
+{% load highlight %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +18,38 @@
             <div class="card shadow-lg border-0 mb-4">
                 <div class="card-body p-4">
                     <h1 class="mb-4 fw-bold text-center text-primary">To-Do List</h1>
+                    <div class="mb-3">
+                        <form method="get" class="row g-2 align-items-center">
+                            <div class="col-auto">
+                                <label class="fw-semibold me-2">Sort by:</label>
+                            </div>
+                            <div class="col-auto">
+                                <select name="sort" class="form-select w-auto">
+                                    <option value="created_at" {% if sort == 'created_at' %}selected{% endif %}>Created</option>
+                                    <option value="deadline" {% if sort == 'deadline' %}selected{% endif %}>Deadline</option>
+                                    <option value="name" {% if sort == 'name' %}selected{% endif %}>Name</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <select name="direction" class="form-select w-auto">
+                                    <option value="desc" {% if direction == 'desc' %}selected{% endif %}>Descending</option>
+                                    <option value="asc" {% if direction == 'asc' %}selected{% endif %}>Ascending</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-outline-primary btn-sm" name="sort_btn" value="1">Sort</button>
+                            </div>
+                            <div class="col flex-grow-1"></div>
+                        </form>
+                        <form method="get" class="row g-2 align-items-center mt-2">
+                            <div class="col">
+                                <input type="text" name="search" class="form-control" placeholder="Search tasks..." value="{{ search }}">
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-outline-success btn-sm" name="search_btn" value="1">Search</button>
+                            </div>
+                        </form>
+                    </div>
                     <form method="post" class="mb-4">
                         {% csrf_token %}
                         <div class="row g-3 align-items-end">
@@ -41,8 +74,8 @@
                         {% for todo in todos %}
                         <li class="list-group-item bg-light rounded-3 shadow-sm mb-3 d-flex justify-content-between align-items-center py-3 px-3" data-id="{{ todo.id }}">
                             <div class="flex-grow-1">
-                                <strong class="desc {% if todo.is_complete %}text-decoration-line-through text-muted{% endif %} fs-5">{{ todo.name }}</strong><br>
-                                <small class="text-muted">{{ todo.description }}</small>
+                                <strong class="desc {% if todo.is_complete %}text-decoration-line-through text-muted{% endif %} fs-5">{{ todo.name|highlight:search|safe }}</strong><br>
+                                <small class="text-muted">{{ todo.description|highlight:search|safe }}</small>
                                 {% if todo.deadline %}<br><span class="badge bg-info text-dark">Deadline: {{ todo.deadline|date:'Y-m-d H:i' }}</span>{% endif %}
                             </div>
                             <div class="d-flex align-items-center gap-2">

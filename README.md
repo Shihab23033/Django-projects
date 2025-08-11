@@ -7,6 +7,8 @@ A web-based To-Do List app built with Django, MySQL, and Pipenv.
 - View delete history (see all deleted tasks)
 - Restore deleted tasks from history
 - Mark tasks as complete/incomplete
+- Sort tasks by deadline, name, or created date (ascending/descending)
+- Search tasks by name or description (with highlighted matches)
 - AJAX for dynamic updates (no page reload)
 - Bootstrap for a modern UI
 
@@ -81,9 +83,12 @@ Visit http://127.0.0.1:8000/ in your browser.
 
 ---
 
+
 ## Usage
 
 - The main page shows all active (not deleted) tasks.
+- Use the sort controls to order tasks by deadline, name, or created date.
+- Use the search box to filter tasks by name or description. Matching text will be highlighted.
 - Click "Show Delete History" to view deleted tasks.
 - On the delete history page, click "Restore" to bring a task back to the main list.
 

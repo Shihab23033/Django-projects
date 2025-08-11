@@ -4,9 +4,29 @@ from .models import ToDo
 from .forms import ToDoForm
 
 def todo_list(request):
-	todos = ToDo.objects.filter(deleted_at__isnull=True).order_by('-created_at')
+	sort = request.GET.get('sort', 'created_at')
+	direction = request.GET.get('direction', 'desc')
+	search = request.GET.get('search', '').strip()
+	valid_sorts = {
+		'name': 'name',
+		'deadline': 'deadline',
+		'created_at': 'created_at',
+	}
+	sort_field = valid_sorts.get(sort, 'created_at')
+	order_prefix = '-' if direction == 'desc' else ''
+	todos_qs = ToDo.objects.filter(deleted_at__isnull=True)
+	if search:
+		from django.db.models import Q
+		todos_qs = todos_qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
+	todos = todos_qs.order_by(f'{order_prefix}{sort_field}')
 	form = ToDoForm()
-	return render(request, 'todo/todo_list.html', {'todos': todos, 'form': form})
+	return render(request, 'todo/todo_list.html', {
+		'todos': todos,
+		'form': form,
+		'sort': sort,
+		'direction': direction,
+		'search': search,
+	})
 
 def add_todo(request):
 	if request.method == 'POST':
