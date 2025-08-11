@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mb-3 text-end">
+    <a href="{% url 'todo_list' %}" class="btn btn-outline-primary">Back to To-Do List</a>
+</div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0 mb-4">
+            <div class="card-body p-4">
+                <h1 class="mb-4 fw-bold text-center text-danger">Deleted ToDos (Delete History)</h1>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Deadline</th>
+                                <th>Deleted At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for todo in deleted_todos %}
+                            <tr>
+                                <td>{{ todo.name }}</td>
+                                <td>{{ todo.description }}</td>
+                                <td>{% if todo.deadline %}{{ todo.deadline|date:'Y-m-d H:i' }}{% endif %}</td>
+                                <td>{{ todo.deleted_at|date:'Y-m-d H:i' }}</td>
+                                <td>
+                                    <form method="post" action="{% url 'restore_todo' todo.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-sm">Restore</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="5" class="text-center">No deleted todos.</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

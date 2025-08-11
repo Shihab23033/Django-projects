@@ -4,7 +4,7 @@ from .models import ToDo
 from .forms import ToDoForm
 
 def todo_list(request):
-	todos = ToDo.objects.all().order_by('-created_at')
+	todos = ToDo.objects.filter(deleted_at__isnull=True).order_by('-created_at')
 	form = ToDoForm()
 	return render(request, 'todo/todo_list.html', {'todos': todos, 'form': form})
 
@@ -32,7 +32,9 @@ def update_todo(request, pk):
 def delete_todo(request, pk):
 	todo = get_object_or_404(ToDo, pk=pk)
 	if request.method == 'POST':
-		todo.delete()
+		from django.utils import timezone
+		todo.deleted_at = timezone.now()
+		todo.save()
 		if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 			return JsonResponse({'success': True})
 		return redirect('todo_list')
@@ -52,3 +54,18 @@ def edit_todo(request, pk):
 	else:
 		form = ToDoForm(instance=todo)
 	return render(request, 'todo/edit_todo_form.html', {'form': form, 'todo': todo})
+
+# View to show deleted todos (delete history)
+def deleted_todos(request):
+	deleted = ToDo.objects.filter(deleted_at__isnull=False).order_by('-deleted_at')
+
+	return render(request, 'todo/deleted_todo_list.html', {'deleted_todos': deleted})
+
+# Restore deleted todo
+def restore_todo(request, pk):
+	todo = get_object_or_404(ToDo, pk=pk)
+	if request.method == 'POST':
+		todo.deleted_at = None
+		todo.save()
+		return redirect('deleted_todos')
+	return JsonResponse({'error': 'Invalid request'}, status=400)

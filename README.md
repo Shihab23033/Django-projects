@@ -3,7 +3,9 @@
 A web-based To-Do List app built with Django, MySQL, and Pipenv.
 
 ## Features
-- Add, update, and delete tasks
+- Add, update, and soft delete tasks (deleted tasks can be restored)
+- View delete history (see all deleted tasks)
+- Restore deleted tasks from history
 - Mark tasks as complete/incomplete
 - AJAX for dynamic updates (no page reload)
 - Bootstrap for a modern UI
@@ -71,9 +73,19 @@ Visit http://127.0.0.1:8000/ in your browser.
 - All dependencies are listed in `Pipfile` and `Pipfile.lock`.
 - For any issues, check your MySQL server is running and credentials are correct.
 
+
 ## Project Structure
 - `todolist/` - Project settings and URLs
+- `todo/` - Main app (models, views, templates)
 - `manage.py` - Django management script
+
+---
+
+## Usage
+
+- The main page shows all active (not deleted) tasks.
+- Click "Show Delete History" to view deleted tasks.
+- On the delete history page, click "Restore" to bring a task back to the main list.
 
 ---
 

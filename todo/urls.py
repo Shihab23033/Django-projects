@@ -7,4 +7,6 @@ urlpatterns = [
     path('update/<int:pk>/', views.update_todo, name='update_todo'),
     path('delete/<int:pk>/', views.delete_todo, name='delete_todo'),
     path('edit/<int:pk>/', views.edit_todo, name='edit_todo'),
+    path('deleted/', views.deleted_todos, name='deleted_todos'),
+    path('restore/<int:pk>/', views.restore_todo, name='restore_todo'),
 ]
